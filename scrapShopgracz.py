@@ -21,6 +21,7 @@ def extract(source):
 def scrap():
     url = f"{URL}1"
     i = 1
+    list=[]
 
     while requests.get(url, headers=HEADERS).status_code == 200:
         raw=extract(scrape(url))
@@ -28,11 +29,12 @@ def scrap():
 
         if (raw==None):
             break
-        print(raw)
-
+        list+=raw
+        print("Przerobiono wierszy: ",i)
         i += 1
         url = f"{URL}{i}"
 
+    return list
 
 if __name__ == '__main__':
-    scrap()
+    print(scrap())
