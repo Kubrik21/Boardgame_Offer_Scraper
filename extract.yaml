@@ -1,0 +1,22 @@
+Mepel:
+    css: div.products-grid >div.product
+    multiple: true
+    type: Text
+    children:
+        Name:
+            css: span.productname
+            type: Text
+        Img:
+            css: a.prodimage>img
+            type: Attribute
+            attribute: src
+        Link:
+            css: a.prodimage
+            type: Attribute
+            attribute: href
+        Price:
+            css: div.price
+            type: Text
+
+
+
