@@ -15,7 +15,7 @@ Mepel:
             type: Attribute
             attribute: href
         Price:
-            css: div.price
+            css: div.price > em
             type: Text
 
 Selector:
