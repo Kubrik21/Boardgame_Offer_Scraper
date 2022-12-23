@@ -22,5 +22,29 @@ Selector:
     css: ul.paginator > li.selected > span
 
 
+Shopgracz:
+    css: div.products > div.item-product
+    multiple: true
+    type: Text
+    children:
+        Name:
+            css: h4 > a > span
+            type: Text
+        Img:
+            css: div.img_block > a >img
+            type: Attribute
+            attribute: src
+        Link:
+            css: h4 >a
+            type: Attribute
+            attribute: href
+        Price:
+            css: div.product-price-and-shipping >span.price
+            type: Attribute
+            attribute: content
+
+
+
+
 
 
