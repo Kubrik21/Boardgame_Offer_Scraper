@@ -1,9 +1,8 @@
 import requests
 from selectorlib import Extractor
 
-URL="https://mepel.pl/gry-planszowe"
-#+ /2
 
+URL="https://mepel.pl/gry-planszowe"
 URL2="https://shopgracz.pl/19-gry-planszowe"
 #+ ?page=2
 
@@ -12,20 +11,22 @@ HEADERS = {
 
 def scrape(url):
     response=requests.get(url, headers=HEADERS)
+    print(response)
     source = response.text
-
-    return source
+    #return source
 
 def extract(source):
     extractor=Extractor.from_yaml_file("extract.yaml")
     value=extractor.extract(source)["Mepel"]
     return value
+
 if __name__ == '__main__':
+
     print(scrape(URL))
     #print(extract(scrape(URL)))
     #print(extract(scrape(URL2)))
 
-    print(extract(scrape(URL)))
+    #print(extract(scrape(URL)))
 
 
 

@@ -18,5 +18,9 @@ Mepel:
             css: div.price
             type: Text
 
+Selector:
+    css: ul.paginator > li.selected > span
+
+
 
 
