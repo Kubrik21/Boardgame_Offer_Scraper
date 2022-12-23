@@ -19,7 +19,6 @@ def extract(source):
     return value,site
 
 
-
 def scrap():
     url = f"{URL}/1"
     i = 1
@@ -34,9 +33,6 @@ def scrap():
 
         i += 1
         url = f"{URL}/{i}"
-
-
-
 
 
 if __name__ == '__main__':
