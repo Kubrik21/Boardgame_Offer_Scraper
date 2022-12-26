@@ -24,6 +24,7 @@ def scrap():
     list=[]
 
     while requests.get(url, headers=HEADERS).status_code == 200:
+
         raw=extract(scrape(url))
 
 
