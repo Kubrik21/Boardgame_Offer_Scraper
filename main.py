@@ -25,6 +25,7 @@ if __name__ == '__main__':
         L2=file.read()
 
    # print(json.loads(L2)[1])
+    #Merging data - 350 games available on both sites
     All=merge(json.loads(L1),json.loads(L2))
     for x in range(len(All)):
         print(All[x])
