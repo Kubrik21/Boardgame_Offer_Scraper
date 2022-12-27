@@ -16,6 +16,8 @@ def scrape(URL):
 def extract(source):
     extractor = Extractor.from_yaml_file("extract.yaml")
     value = extractor.extract(source)["Shopgracz"]
+
+
     return value
 
 def scrap():
@@ -30,6 +32,8 @@ def scrap():
 
         if (raw==None):
             break
+        for elem in raw:
+            elem["Name"] = str(elem["Name"]).lower()
         list+=raw
         print("Przerobiono wierszy: ",i)
         i += 1

@@ -20,6 +20,7 @@ def extract(source):
         elem["Img"]=f"https://mepel.pl{elem['Img']}"
         elem["Link"]=f"https://mepel.pl{elem['Link']}"
         elem["Price"]=elem['Price'][:elem['Price'].index(',')+3]
+        elem["Name"] = str(elem["Name"]).lower()
 
     return value,site
 
