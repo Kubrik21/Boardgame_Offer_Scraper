@@ -2,8 +2,11 @@
 def merge(list1,list2):
     result = []
     for element in list1 + list2:
+        try:
+            index = next(i for i, x in enumerate(result) if x['Name'] == element['Name'])
+        except StopIteration:
+            index=None
 
-        index = next(i for i, x in enumerate(result) if x['Name'] == element['Name'])
 
         if index is not None:
             result[index]['Shop'].append({
