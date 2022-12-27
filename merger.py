@@ -7,10 +7,15 @@ def merge(list1,list2):
         except StopIteration:
             index=None
 
+        #getting name of store
+        if "mepel.pl" in str(result[index]["Link"]):
+            shop="mepel.pl"
+        else:
+            shop="Shopgracz.pl"
 
         if index is not None:
             result[index]['Shop'].append({
-                "Shop_name": 'kupa',
+                "Shop_name": shop,
                 "Price": element["Price"],
                 "Link": element["Link"]
             })
@@ -20,7 +25,7 @@ def merge(list1,list2):
                 "Img": element["Img"],
                 "Shop": [
                     {
-                        "Shop_name": "kupa",
+                        "Shop_name": shop,
                         "Price": element["Price"],
                         "Link": element["Link"]
                     }
@@ -28,7 +33,3 @@ def merge(list1,list2):
             })
     return result
 
-
-#if __name__ == '__main__':
-    #merge(list1,list2)
-    #merge_rest(result,list1,list2)
