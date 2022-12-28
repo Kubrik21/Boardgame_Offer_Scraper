@@ -125,8 +125,8 @@ def unionBoardgames():
     mycursor.execute("DROP TABLE IF EXISTS temp")
 
 
-#Pobierz nową tabelę gier i jej indeksów
 #Usun wszystkie dotychczasowe gry i ich ceny z maina jeśli data jest dzisiejsza
+#Pobierz nową tabelę gier i jej indeksów
 #Dodaj dzisiejsze gry indeksy z innej tabeli
 
 
