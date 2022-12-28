@@ -1,6 +1,8 @@
 import mysql.connector
 from datetime import date
 
+from merger import merge
+import json
 #
 # initial=False
 #
@@ -65,10 +67,7 @@ def actualize():
     print(db_date)
     # A
     # Dodaj dzisiejszą datę i zwróć indeks[Done]
-    # Wrzuć do tabeli temp gry i ich zdjęcia
-    # Zrób Union na tabeli gier i temp
-    # usuń temp
-    # Pass
+    # Pass[Done]
 
     if db_date == [] or str(db_date[0][0])!=today:
         print(db_date)
@@ -84,10 +83,8 @@ def actualize():
     else:
         # B
         # Przypisz indeksowi dzisiejszą datę[Done]
-        # Wrzuć do tabeli temp gry i ich zdjęcia
-        # Zrób Union na tabeli gier i temp
-        # usuń temp
-        # Pass
+        #
+        # Pass[Done]
         mycursor.execute("SELECT id FROM db_date ORDER BY id DESC LIMIT 1")
         dateID = mycursor.fetchall()
         print("jest")
@@ -96,9 +93,36 @@ def actualize():
 
     unionBoardgames()
 
+        #Wrzuć do tabeli temp gry i ich zdjęcia[Done]
+
 def unionBoardgames():
+    mycursor.execute("DROP TABLE IF EXISTS temp")
     mycursor.execute("CREATE TABLE temp LIKE db_boardgames")
-    for elem in
+    val=[]
+    #Temp
+    with open("Mepel", "r", encoding='utf-8') as file:
+        L1=file.read()
+    with open("Shopgracz", "r", encoding='utf-8') as file:
+        L2=file.read()
+
+    All = merge(json.loads(L1), json.loads(L2))
+    for elem in All:
+        val.append((elem["Name"], elem["Img"]))
+
+
+    #print(val)
+    sql = "INSERT INTO temp (boardgame_name,img) VALUES (%s,%s)"
+    mycursor.executemany(sql, val)
+    mydb.commit()
+    print(mycursor.rowcount, "was inserted.")
+
+    # dodaj tylko to czego brakuje[DONE]
+    #Sprawdź czy można pominąć tworzenie tempa i przekazać parametr z listą dla selecta z Not IN
+    mycursor.execute("INSERT INTO dbo_boardgames_temp.db_boardgames SELECT * FROM dbo_boardgames_temp.temp B WHERE B.boardgame_name NOT IN (SELECT boardgame_name FROM dbo_boardgames_temp.db_boardgames)")
+    mydb.commit()
+
+    # usuń temp[DONE]
+    mycursor.execute("DROP TABLE IF EXISTS temp")
 
 
 #Pobierz nową tabelę gier i jej indeksów
