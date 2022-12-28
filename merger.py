@@ -8,7 +8,7 @@ def merge(list1,list2):
             index=None
 
         #getting name of store
-        if "mepel.pl" in str(result[index]["Link"]):
+        if "mepel.pl" in element["Link"]:
             shop="mepel.pl"
         else:
             shop="Shopgracz.pl"
