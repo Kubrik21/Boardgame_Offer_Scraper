@@ -60,8 +60,8 @@ mycursor = mydb.cursor(buffered=True)
 #Pobierz najnowszą datę [DONE]
 #jeśli nie ma lub nie dzisiejsza -> A [Done]
 #Jeśli jest dzisiejsza -> B [Done]
+today = date.today().strftime("%d-%m-%Y")
 def actualize():
-    today = date.today().strftime("%d-%m-%Y")
     mycursor.execute("SELECT date FROM db_date ORDER BY id DESC LIMIT 1")
     db_date= mycursor.fetchall()
     print(db_date)
@@ -72,14 +72,14 @@ def actualize():
     if db_date == [] or str(db_date[0][0])!=today:
         print(db_date)
         print(today)
-
+        print("dodano")
         sql="INSERT INTO db_date (date) VALUES (%s)"
         val=(today,)
         mycursor.execute(sql,val)
         mydb.commit()
 
         print(mycursor.rowcount, "record inserted.")
-        print(mycursor.lastrowid)
+        dateID=mycursor.lastrowid
     else:
         # B
         # Przypisz indeksowi dzisiejszą datę[Done]
@@ -125,9 +125,21 @@ def unionBoardgames():
     mycursor.execute("DROP TABLE IF EXISTS temp")
 
 
-#Usun wszystkie dotychczasowe gry i ich ceny z maina jeśli data jest dzisiejsza
+#Usun wszystkie dotychczasowe gry i ich ceny z maina jeśli data jest dzisiejsza[DONE]
+def delete_last(id):
+    sql="DELETE FROM db_offer WHERE date_id = (%s)"
+    val=id
+    mycursor.execute(sql,val)
+    mydb.commit()
+
 #Pobierz nową tabelę gier i jej indeksów
+def get_game_index():
+
+
+
+
 #Dodaj dzisiejsze gry indeksy z innej tabeli
 
 
-actualize()
+#actualize()
+delete_last((2,))
