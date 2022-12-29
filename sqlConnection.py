@@ -132,14 +132,16 @@ def delete_last(id):
     mycursor.execute(sql,val)
     mydb.commit()
 
-#Pobierz nową tabelę gier i jej indeksów
+#Pobierz nową tabelę gier i jej indeksów[Done]
 def get_game_index():
-
-
+    mycursor.execute("SELECT id,boardgame_name FROM db_boardgames")
+    gameID = mycursor.fetchall()
+    print(gameID)
 
 
 #Dodaj dzisiejsze gry indeksy z innej tabeli
 
 
 #actualize()
-delete_last((2,))
+#delete_last((2,))
+get_game_index()
