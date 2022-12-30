@@ -5,9 +5,22 @@ from merger import merge
 import json
 
 connect=['localhost','root','123MySql321','dbo_boardgames']
-
+def connect():
+    mydb = mysql.connector.connect(
+        host=connect[0],
+        user=connect[1],
+        password=connect[2],
+        database=connect[3],
+    )
+    #mycursor = mydb.cursor(buffered=True)
+    return mydb
 
 def actualize():
+
+    mydb=connect()
+    mycursor = mydb.cursor(buffered=True)
+
+    today = date.today().strftime("%d-%m-%Y")
 
     #Get latest date from DBtable
     mycursor.execute("SELECT date FROM db_date ORDER BY id DESC LIMIT 1")
@@ -75,6 +88,10 @@ def unionBoardgames():
 
 #If we scrap data two or more times. Delete today's data
 def delete_last(date_id):
+
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
+
     sql="DELETE FROM db_offer WHERE date_id = (%s)"
     val=date_id
     mycursor.execute(sql,val)
@@ -82,6 +99,9 @@ def delete_last(date_id):
 
 #Download bg's names and ID's. Return List of tuples
 def get_game_index():
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
+
     mycursor.execute("SELECT id,boardgame_name FROM db_boardgames")
     gameID = mycursor.fetchall()
     print(gameID)
@@ -89,6 +109,9 @@ def get_game_index():
 
 #Fill db_offer table
 def add_offer(bgList,gameID,dateID):
+
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
 
     val=[]
     #For every single element from list of scrapped data
