@@ -4,18 +4,18 @@ from datetime import date
 from merger import merge
 import json
 
-connect=['localhost','root','123MySql321','dbo_boardgames']
+con=['localhost','root','123MySql321','dbo_boardgames']
 def connect():
     mydb = mysql.connector.connect(
-        host=connect[0],
-        user=connect[1],
-        password=connect[2],
-        database=connect[3],
+        host=con[0],
+        user=con[1],
+        password=con[2],
+        database=con[3],
     )
     #mycursor = mydb.cursor(buffered=True)
     return mydb
 
-def actualize():
+def actualize(mergedData):
 
     mydb=connect()
     mycursor = mydb.cursor(buffered=True)
@@ -48,27 +48,31 @@ def actualize():
         #print(dateID)
 
     #expand the game database with new titles that appeared during the last one scrapping
-    unionBoardgames()
+    unionBoardgames(mergedData)
 
     #return dateID
     return dateID
 
-def unionBoardgames():
+def unionBoardgames(List):
+
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
+
     #drop temp DB table if exist
-    mycursor.execute("DROP TABLE IF EXISTS temp")
+    mycursor.execute("DROP TABLE IF EXISTS dbo_boardgames.temp")
     #create new temp table
-    mycursor.execute("CREATE TABLE temp LIKE db_boardgames")
+    mycursor.execute("CREATE TABLE temp LIKE dbo_boardgames.db_boardgames")
 
     val=[]
     #Temp
-    with open("Mepel", "r", encoding='utf-8') as file:
-        L1=file.read()
-    with open("Shopgracz", "r", encoding='utf-8') as file:
-        L2=file.read()
+    # with open("Mepel", "r", encoding='utf-8') as file:
+    #     L1=file.read()
+    # with open("Shopgracz", "r", encoding='utf-8') as file:
+    #     L2=file.read()
 
-    All = merge(json.loads(L1), json.loads(L2))
+    # All = merge(json.loads(L1), json.loads(L2))
     #From every single data row get the name and IMG
-    for elem in All:
+    for elem in List:
         val.append((elem["Name"], elem["Img"]))
     #
 
@@ -80,7 +84,7 @@ def unionBoardgames():
     print(mycursor.rowcount, "was inserted.")
 
     #Add to existing main, boardgame' database nonexistend rows
-    mycursor.execute("INSERT INTO db_boardgames SELECT * FROM temp B WHERE B.boardgame_name NOT IN (SELECT boardgame_name FROM db_boardgames)")
+    mycursor.execute("INSERT INTO dbo_boardgames.db_boardgames (boardgame_name,img) SELECT B.boardgame_name,B.img FROM dbo_boardgames.temp B WHERE B.boardgame_name NOT IN (SELECT boardgame_name FROM dbo_boardgames.db_boardgames)")
     mydb.commit()
 
     #drop temp table
@@ -93,7 +97,7 @@ def delete_last(date_id):
     mycursor = mydb.cursor(buffered=True)
 
     sql="DELETE FROM db_offer WHERE date_id = (%s)"
-    val=date_id
+    val=(date_id,)
     mycursor.execute(sql,val)
     mydb.commit()
 
@@ -160,10 +164,10 @@ def get_data(dateID):
 if __name__== '__main__':
 
     mydb = mysql.connector.connect(
-        host=connect[0],
-        user=connect[1],
-        password=connect[2],
-        database=connect[3],
+        host=con[0],
+        user=con[1],
+        password=con[2],
+        database=con[3],
     )
     mycursor = mydb.cursor(buffered=True)
 
