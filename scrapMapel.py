@@ -13,7 +13,7 @@ def scrape(URL):
     return source
 
 def extract(source):
-    extractor = Extractor.from_yaml_file("extract.yaml")
+    extractor = Extractor.from_yaml_file("../extract.yaml")
     value = extractor.extract(source)["Mepel"]
     site = extractor.extract(source)["Selector"]
     for elem in value:
@@ -43,5 +43,5 @@ def scrap():
     return list
 
 if __name__ == '__main__':
-    print(scrap())
-    #print(extract(scrape(URL)))
+    #print(scrap())
+    print(extract(scrape(URL)))

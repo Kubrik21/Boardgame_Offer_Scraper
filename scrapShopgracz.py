@@ -14,7 +14,7 @@ def scrape(URL):
     return source
 
 def extract(source):
-    extractor = Extractor.from_yaml_file("extract.yaml")
+    extractor = Extractor.from_yaml_file("../extract.yaml")
     value = extractor.extract(source)["Shopgracz"]
 
 
