@@ -13,13 +13,14 @@ def scrape(URL):
     source = response.text
     return source
 
+#Extract data from source and modify
 def extract(source):
     extractor = Extractor.from_yaml_file("../extract.yaml")
     value = extractor.extract(source)["Shopgracz"]
 
-
     return value
 
+#Extract data for every single page with boardgames
 def scrap():
     url = f"{URL}1"
     i = 1
@@ -28,7 +29,6 @@ def scrap():
     while requests.get(url, headers=HEADERS).status_code == 200:
 
         raw=extract(scrape(url))
-
 
         if (raw==None):
             break

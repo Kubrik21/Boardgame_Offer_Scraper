@@ -1,8 +1,6 @@
 import mysql.connector
 import datetime
 
-from merger import merge
-import json
 
 con=['localhost','root','123MySql321','dbo_boardgames']
 def connect():
@@ -15,7 +13,7 @@ def connect():
     #mycursor = mydb.cursor(buffered=True)
     return mydb
 
-def actualize(mergedData):
+def actualize():
 
     mydb=connect()
     mycursor = mydb.cursor(buffered=True)
@@ -23,7 +21,7 @@ def actualize(mergedData):
     today = datetime.date.today().strftime("%Y-%m-%d")
 
     #Get latest date from DBtable
-    mycursor.execute("SELECT date FROM db_date ORDER BY id DESC LIMIT 1")
+    mycursor.execute("SELECT scrapDate FROM db_date ORDER BY id DESC LIMIT 1")
     db_date = mycursor.fetchall()
 
     #print(db_date)
@@ -31,7 +29,7 @@ def actualize(mergedData):
     #If date doesnt exist or it is different than today's date
     if db_date == [] or str(db_date[0][0]) != today:
         #Add today's date
-        sql = "INSERT INTO db_date (date) VALUES (%s)"
+        sql = "INSERT INTO db_date (scrapDate) VALUES (%s)"
         val = (today,)
         mycursor.execute(sql, val)
         mydb.commit()
@@ -48,7 +46,7 @@ def actualize(mergedData):
         #print(dateID)
 
     #expand the game database with new titles that appeared during the last one scrapping
-    unionBoardgames(mergedData)
+
 
     #return dateID
     return dateID
@@ -149,23 +147,43 @@ def add_offer(bgList,gameID,dateID):
 
     mydb.commit()
 
-#get whole data which dateID = x
-def get_data(dateID):
-    sql="SELECT b.boardgame_name, b.img, o.store, o.link, o.price FROM db_offer o JOIN db_boardgames AS b ON o.game_id = b.id WHERE o.date_id=%s"
-    #val=(dateID,)
-    val=(2,)
+def get_latest_date():
 
-    mycursor.execute(sql,val)
-    offerList = mycursor.fetchall()
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
 
-    return offerList
+
+    mycursor.execute("SELECT scrapDate FROM db_date ORDER BY id DESC LIMIT 1")
+    dateName = mycursor.fetchall()[0][0]
+
+
+    return dateName
+
+
+def games_last_actualize(date):
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
+
+
+    sql = """
+        SELECT o.id, b.boardgame_name, b.img , o.store, o.link, o.price,d.scrapDate FROM dbo_boardgames.db_offer AS o
+        INNER JOIN dbo_boardgames.db_date AS d ON d.id = o.date_id
+        INNER JOIN dbo_boardgames.db_boardgames AS b ON b.id = o.game_id
+        where d.scrapDate>=(%s); """
+    val = (date,)
+
+    mycursor.execute(sql, val)
+    latestGames = mycursor.fetchall()
+
+    return latestGames
+
 
 def game_stats(gameID):
 
     mydb = connect()
     mycursor = mydb.cursor(buffered=True)
 
-    prevDay = datetime.date.today() - datetime.timedelta(days=7)
+    prevDay = datetime.date.today() - datetime.timedelta(days=6)
     prevDay=prevDay.strftime("%Y-%m-%d")
 
 
@@ -173,11 +191,12 @@ def game_stats(gameID):
     SELECT o.id, b.boardgame_name, b.img , o.store, o.link, o.price,d.scrapDate FROM dbo_boardgames.db_offer AS o
     INNER JOIN dbo_boardgames.db_date AS d ON d.id = o.date_id
     INNER JOIN dbo_boardgames.db_boardgames AS b ON b.id = o.game_id
-    where d.scrapDate>(%s) AND b.id=%s; """
+    where d.scrapDate>=(%s) AND b.id=%s; """
     val = (prevDay,gameID)
 
     mycursor.execute(sql, val)
     gamesFromInterval = mycursor.fetchall()
+
     return gamesFromInterval
 
 if __name__== '__main__':
@@ -195,6 +214,6 @@ if __name__== '__main__':
     # fill bd_date and db_boardgame
     #idDate = actualize()
 
-    game_stats(2)
+    #game_stats(2)
     # List of bg indexes
     # listOfID=get_game_index()

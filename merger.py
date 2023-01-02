@@ -1,4 +1,3 @@
-
 def merge(list1,list2):
     result = []
     for element in list1 + list2:

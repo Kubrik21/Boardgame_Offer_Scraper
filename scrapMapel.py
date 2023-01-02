@@ -3,7 +3,6 @@ from selectorlib import Extractor
 
 URL="https://mepel.pl/gry-planszowe"
 
-
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
@@ -12,6 +11,7 @@ def scrape(URL):
     source = response.text
     return source
 
+#Extract data from source and modify
 def extract(source):
     extractor = Extractor.from_yaml_file("../extract.yaml")
     value = extractor.extract(source)["Mepel"]
@@ -24,7 +24,7 @@ def extract(source):
 
     return value,site
 
-
+#Extract data for every single page with boardgames
 def scrap():
     url = f"{URL}/1"
     i = 1

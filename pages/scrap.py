@@ -40,8 +40,10 @@ def scrap_file():
        json.dump(All,file,ensure_ascii=False)
 
     #Send if file exist to DB
-    #Fix
-    dateID=db.actualize(All)
+
+    dateID=db.actualize()
+
+    db.unionBoardgames(All)
 
     db.delete_last(dateID)
 
