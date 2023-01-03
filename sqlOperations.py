@@ -147,6 +147,7 @@ def add_offer(bgList,gameID,dateID):
 
     mydb.commit()
 
+
 def get_latest_date():
 
     mydb = connect()
