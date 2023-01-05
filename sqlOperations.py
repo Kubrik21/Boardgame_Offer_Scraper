@@ -106,7 +106,7 @@ def get_game_index():
 
     mycursor.execute("SELECT id,boardgame_name FROM db_boardgames")
     gameID = mycursor.fetchall()
-    print(gameID)
+    # print(gameID)
     return gameID
 
 #Fill db_offer table
@@ -193,6 +193,7 @@ def game_stats(gameID):
     INNER JOIN dbo_boardgames.db_date AS d ON d.id = o.date_id
     INNER JOIN dbo_boardgames.db_boardgames AS b ON b.id = o.game_id
     where d.scrapDate>=(%s) AND b.id=%s; """
+
     val = (prevDay,gameID)
 
     mycursor.execute(sql, val)
