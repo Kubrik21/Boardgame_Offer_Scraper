@@ -63,7 +63,7 @@ def scrap_file(x):
     st.success('Done!')
 
 
-st.title("Scrap boargames")
+st.title("Scrap boardgames")
 st.write("""
 The spider will scrap the offer of two well-known board game stores - mepel.pl and aleplanszówki.pl.
 The received data will be merged and sent to the database. The process may take 3-5 minutes
