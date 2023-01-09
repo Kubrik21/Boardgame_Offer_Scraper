@@ -1,7 +1,7 @@
 import mysql.connector
 import datetime
 
-
+#Connection to DB
 con=['localhost','root','123MySql321','dbo_boardgames']
 def connect():
     mydb = mysql.connector.connect(
@@ -13,6 +13,7 @@ def connect():
     #mycursor = mydb.cursor(buffered=True)
     return mydb
 
+#
 def actualize():
 
     mydb=connect()
@@ -23,8 +24,6 @@ def actualize():
     #Get latest date from DBtable
     mycursor.execute("SELECT scrapDate FROM db_date ORDER BY id DESC LIMIT 1")
     db_date = mycursor.fetchall()
-
-    #print(db_date)
 
     #If date doesnt exist or it is different than today's date
     if db_date == [] or str(db_date[0][0]) != today:
@@ -45,12 +44,10 @@ def actualize():
         dateID = mycursor.fetchall()[0][0]
         #print(dateID)
 
-    #expand the game database with new titles that appeared during the last one scrapping
-
-
     #return dateID
     return dateID
 
+#expand the game database with new titles that appeared during the last one scrapping
 def unionBoardgames(List):
 
     mydb = connect()
@@ -62,17 +59,8 @@ def unionBoardgames(List):
     mycursor.execute("CREATE TABLE temp LIKE dbo_boardgames.db_boardgames")
 
     val=[]
-    #Temp
-    # with open("Mepel", "r", encoding='utf-8') as file:
-    #     L1=file.read()
-    # with open("Shopgracz", "r", encoding='utf-8') as file:
-    #     L2=file.read()
-
-    # All = merge(json.loads(L1), json.loads(L2))
-    #From every single data row get the name and IMG
     for elem in List:
         val.append((elem["Name"], elem["Img"]))
-    #
 
     #fill the temp table
     sql = "INSERT INTO temp (boardgame_name,img) VALUES (%s,%s)"
@@ -147,24 +135,21 @@ def add_offer(bgList,gameID,dateID):
 
     mydb.commit()
 
-
+#Get latest date from DB (info about last update)
 def get_latest_date():
 
     mydb = connect()
     mycursor = mydb.cursor(buffered=True)
 
-
     mycursor.execute("SELECT scrapDate FROM db_date ORDER BY id DESC LIMIT 1")
     dateName = mycursor.fetchall()[0][0]
 
-
     return dateName
 
-
+#get games data from last update
 def games_last_actualize(date):
     mydb = connect()
     mycursor = mydb.cursor(buffered=True)
-
 
     sql = """
         SELECT o.id, b.boardgame_name, b.img , o.store, o.link, o.price,d.scrapDate FROM dbo_boardgames.db_offer AS o
@@ -179,6 +164,7 @@ def games_last_actualize(date):
     return latestGames
 
 
+#Price history for chosen game for last 7 days
 def game_stats(gameID):
 
     mydb = connect()
@@ -212,10 +198,3 @@ if __name__== '__main__':
     mycursor = mydb.cursor(buffered=True)
 
     today = datetime.date.today().strftime("%Y-%m-%d")
-
-    # fill bd_date and db_boardgame
-    #idDate = actualize()
-
-    #game_stats(2)
-    # List of bg indexes
-    # listOfID=get_game_index()

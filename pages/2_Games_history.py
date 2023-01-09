@@ -51,16 +51,13 @@ st.markdown("""
 
 def main():
 
-
-
     List = db.get_game_index()
     list_tuple = [ (item[1]) for item in List ]
 
     st.selectbox(label="Search game",options=list_tuple, key="selectbox")
     st.markdown('<p class="space-history"></p>',unsafe_allow_html=True)
     print( st.session_state['selectbox'])
-    #Elem to wybór dowolnej gry- indeks z listy
-    #elem=2
+
     if(st.session_state['selectbox']!=None):
         for elem in List:
             if elem[1] == st.session_state['selectbox'] :
@@ -78,18 +75,19 @@ def main():
         raw,urlA,urlB=prepare_data(sevenDays,statisticList)
         # print(raw)
 
-
         raw = raw.melt('Date', var_name='Store', value_name='Price')
-
 
         chart = alt.Chart(raw).mark_line(point=True).encode(
             x=alt.X('Date:N'),
             y=alt.Y('Price:Q'),
             color=alt.Color("Store:N")
         ).properties(title="Price history   ")
+
         st.altair_chart(chart, use_container_width=True)
         st.markdown('<p class="space-history"></p>',unsafe_allow_html=True)
+
         c1,c2,c3=st.columns([2,3,2])
+
         with c1:
             st.write("Mepel.pl")
             if urlA=='': offA=True

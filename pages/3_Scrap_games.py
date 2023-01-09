@@ -10,12 +10,7 @@ import streamlit as st
 
 
 def scrap_file(x):
-    ###block button
-    ###label show
-    ###count on label
 
-    ###after that enable button
-    ###label show
     with st.spinner(text='Scraping data. Wait for it...'):
     # Scrap & save to file
         time.sleep(1)
@@ -68,8 +63,11 @@ st.write("""
 The spider will scrap the offer of two well-known board game stores - mepel.pl and aleplanszówki.pl.
 The received data will be merged and sent to the database. The process may take 3-5 minutes
 """)
+
 c1,c2,c3=st.columns([3,1.5,3])
+
 with c2:
     st.button(label="Scrap data", on_click=scrap_file, args=(1,))
+
 st.empty()
 
